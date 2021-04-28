@@ -4,7 +4,7 @@ using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Microwave.Test.Intergretion
+namespace Microwave.Test.Intergration
 {
     public class Tests
     {
