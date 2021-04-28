@@ -7,10 +7,5 @@ namespace Microwave.Test.Intergretion
     public class BUT2_Display_Output
     {
 
-        [Setup]
-        public void Setup()
-        {
-
-        }
     }
 }
