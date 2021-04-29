@@ -10,19 +10,20 @@ namespace Microwave.Test.Intergretion
 {
     public class BUT2_Display_Output
     {
-        private Display display;
+        private Display sut;
         private IOutput output;
+
         [SetUp]
         public void SetUp()
         {
             output = Substitute.For<IOutput>();
-            display = new Display(output);
+            sut = new Display(output);
         }
 
         [TestCase(03,30)]
         public void Display_ShowTimeIsCalled_OutputLineContainsMinAndSec(int min, int sec)
         {
-            display.ShowTime(min,sec);
+            sut.ShowTime(min,sec);
             output.Received(1)
                 .OutputLine(Arg.Is<string>(s => s.Contains("Display") && s.Contains("03:30")));
         }
@@ -30,7 +31,7 @@ namespace Microwave.Test.Intergretion
         [TestCase(99)]
         public void Display_ShowPowerIsCalled_OutputLineContainsPower(int power)
         {
-            display.ShowPower(power);
+            sut.ShowPower(power);
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("Display") && s.Contains(Convert.ToString(power))));
         }
@@ -38,7 +39,7 @@ namespace Microwave.Test.Intergretion
         [Test]
         public void Display_WhenClearIsCalled_OutPutLineContainsCleared()
         {
-            display.Clear();
+            sut.Clear();
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("Display") && s.Contains("cleared")));
         }

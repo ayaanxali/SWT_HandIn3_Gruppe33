@@ -9,14 +9,14 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Intergretion
 {
-    class BUT4_CookController_PowerTube
+    class BUT5_CookController_Timer
     {
         private IPowerTube powerTube;
         private IDisplay display;
         private ILight light;
         private IUserInterface UI;
         private ITimer timer;
-        private CookController sut;
+        private CookController cookController;
         private IOutput output;
 
         [SetUp]
@@ -28,27 +28,17 @@ namespace Microwave.Test.Intergretion
             light = new Light(output);
             timer = Substitute.For<ITimer>();
             UI = Substitute.For<IUserInterface>();
-           sut = new CookController(timer, display, powerTube, UI);
-        }
-
-        [TestCase(50,50)]
-        public void CookController_StartCooking_OutputIsReceivedOne(int power,int time)
-        {
-            sut.StartCooking(power,time);
-
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
+            cookController = new CookController(timer, display, powerTube, UI);
         }
 
         [TestCase(50, 50)]
-        public void CookController_StopCooking_OutputIsReceivedOne(int power, int time)
+        public void CookController_OnTimerTick_OutputIsReceivedOne(int power, int time)
         {
-            sut.StartCooking(power, time);
+            cookController.StartCooking(power, time);
+            timer.TimeRemaining.Returns(time);
+            timer.TimerTick += Raise.EventWith(this, EventArgs.Empty);
 
-            sut.Stop();
-
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains("turned off")));
+            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
         }
-
-
     }
 }

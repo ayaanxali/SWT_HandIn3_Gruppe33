@@ -8,23 +8,23 @@ namespace Microwave.Test.Intergretion
 {
     public class Tests
     {
-        private PowerTube powerTyber;
+        private PowerTube sut;
         private IOutput output; 
 
         [SetUp]
         public void Setup()
         {
             output = Substitute.For<IOutput>();
-            powerTyber = new PowerTube(output);
+            sut = new PowerTube(output);
             
         }
 
         [Test]
         public void PowerTupe_WhenTurnedOff_OutputLineContainsTurnedOff()
         {
-            powerTyber.TurnOn(10);
+            sut.TurnOn(10);
 
-            powerTyber.TurnOff();
+            sut.TurnOff();
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains("turned off")));
             
@@ -34,7 +34,7 @@ namespace Microwave.Test.Intergretion
         [TestCase(2)]
         public void PowerTupe_WhenTurnedOn_OutputLineContainsTurnedOn(int power)
         {
-            powerTyber.TurnOn(power);
+            sut.TurnOn(power);
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
         }
