@@ -11,6 +11,8 @@ using Timer=Microwave.Classes.Boundary.Timer;
 
 namespace Microwave.Test.Intergretion
 {
+    [TestFixture]
+
     class BUT5_CookController_Timer
     {
         private IPowerTube powerTube;

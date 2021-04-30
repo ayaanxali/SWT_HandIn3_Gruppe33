@@ -8,6 +8,8 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Intergretion
 {
+    [TestFixture]
+
     public class BUT2_Display_Output
     {
         private Display sut;

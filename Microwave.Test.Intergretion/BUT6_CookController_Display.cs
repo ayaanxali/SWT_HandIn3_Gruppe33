@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Intergretion
 {
+    [TestFixture]
+
     class BUT6_CookController_Display
     {
         private IPowerTube powerTube;

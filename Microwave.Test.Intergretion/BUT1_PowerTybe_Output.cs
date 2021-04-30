@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Intergretion
 {
+    [TestFixture]
+
     public class Tests
     {
         private PowerTube sut;
