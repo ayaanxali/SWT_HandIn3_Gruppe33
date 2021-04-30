@@ -15,20 +15,15 @@ namespace Microwave.Test.Intergretion
     {
         private IPowerTube powerTube;
         private IDisplay display;
-        private ILight light;
         private IUserInterface UI;
         private ITimer timer;
         private ICookController cookController;
-        private IOutput output;
 
         [SetUp]
         public void SetUp()
         {
-            //output = Substitute.For<IOutput>();
             powerTube = Substitute.For<IPowerTube>();
-            //display = new Display(output);
             display = Substitute.For<IDisplay>();
-            light = new Light(output);
             timer = new Timer();
             UI = Substitute.For<IUserInterface>();
             cookController = new CookController(timer, display, powerTube, UI);
@@ -51,7 +46,6 @@ namespace Microwave.Test.Intergretion
             Thread.Sleep(1110*waittime);
 
             display.Received().ShowTime(00,time-waittime);
-            //output.Received(1).OutputLine("Display shows: 00:45");
         }
 
         [Test]

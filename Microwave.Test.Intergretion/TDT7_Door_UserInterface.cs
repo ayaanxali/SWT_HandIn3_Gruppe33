@@ -17,7 +17,6 @@ namespace Microwave.Test.Intergretion
         private IButton buttonOfstartCancel; 
         private ILight light;
         private ICookController CC;
-        private ITimer timer; 
 
         [SetUp]
         public void SetUp()
@@ -35,10 +34,21 @@ namespace Microwave.Test.Intergretion
         }
 
         [Test]
-        public void test1()
+        public void OnDoorOpen()
         {
             door.Open();
 
+            light.Received().TurnOn();
+        }
+
+        [Test]
+        public void OnDoorClosed()
+        {
+            door.Open();
+
+            door.Close();
+
+            light.Received().TurnOff();
 
         }
     }
