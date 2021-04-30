@@ -36,6 +36,33 @@ namespace Microwave.Test.Intergretion
         }
         //right now it is to test the interface method in cookcontrol that UI uses
         //maybe in another test we will test interfacet for UI from COOKcrontol that is where CooingIsDone thould be tested
+        [TestCase(1,50)]
+        [TestCase(2,100)]
+        [TestCase(14,700)]
+        public void StartCooking(int nummerOfPressed,int ExpectedPower)
+        {
+
+            for (int i = 0; i < nummerOfPressed; i++)
+            {
+                buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            }
+
+            buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
+
+            powerTube.Received().TurnOn(ExpectedPower);
+        }
+
+        [TestCase()]
+        public void Stop_StopCooking()
+        {
+            buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
+
+            powerTube.Received().TurnOff();
+        }
 
         //[Test]
         //public void CookingIsDone()
