@@ -1,4 +1,5 @@
 ﻿using System;
+using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
@@ -18,7 +19,8 @@ namespace Microwave.Test.Intergretion
         private ILight light;
         private IDoor door;
         private ITimer timer;
-        private IPowerTube powerTube;
+        private PowerTube powerTube;
+        private IOutput output;
 
 
         [SetUp]
@@ -28,11 +30,13 @@ namespace Microwave.Test.Intergretion
             buttonOfPower = Substitute.For<IButton>();
             buttonOfTime = Substitute.For<IButton>();
             buttonOfstartCancel = Substitute.For<IButton>();
+            door = Substitute.For<IDoor>();
             light = Substitute.For<ILight>();
             timer = Substitute.For<ITimer>();
-            powerTube = Substitute.For<IPowerTube>();
-           // CC = new CookController(,new UserInterface());
-            UI = new UserInterface(buttonOfPower,buttonOfTime,buttonOfstartCancel,door,display,light,new CookController(timer, display, powerTube,UI));
+            output = Substitute.For<IOutput>();
+            powerTube = new PowerTube(output);
+            CC = new CookController(timer,display,powerTube);
+            UI = new UserInterface(buttonOfPower,buttonOfTime,buttonOfstartCancel,door,display,light,CC);
         }
         //right now it is to test the interface method in cookcontrol that UI uses
         //maybe in another test we will test interfacet for UI from COOKcrontol that is where CooingIsDone thould be tested
@@ -50,7 +54,9 @@ namespace Microwave.Test.Intergretion
             buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
             buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
-            powerTube.Received().TurnOn(ExpectedPower);
+            //powerTube.Received().TurnOn(ExpectedPower);
+            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(ExpectedPower))));
+
         }
 
         [TestCase()]
