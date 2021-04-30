@@ -19,7 +19,7 @@ namespace Microwave.Test.Intergretion
         private ILight light;
         private IDoor door;
         private ITimer timer;
-        private PowerTube powerTube;
+        private IPowerTube powerTube;
         private IOutput output;
 
 
@@ -34,7 +34,7 @@ namespace Microwave.Test.Intergretion
             light = Substitute.For<ILight>();
             timer = Substitute.For<ITimer>();
             output = Substitute.For<IOutput>();
-            powerTube = new PowerTube(output);
+            powerTube = Substitute.For<IPowerTube>();
             CC = new CookController(timer,display,powerTube);
             UI = new UserInterface(buttonOfPower,buttonOfTime,buttonOfstartCancel,door,display,light,CC);
         }
@@ -54,12 +54,10 @@ namespace Microwave.Test.Intergretion
             buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
             buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
-            //powerTube.Received().TurnOn(ExpectedPower);
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(ExpectedPower))));
-
+            powerTube.Received().TurnOn(ExpectedPower);
         }
 
-        [TestCase()]
+        [Test]
         public void Stop_StopCooking()
         {
             buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
@@ -68,6 +66,7 @@ namespace Microwave.Test.Intergretion
             buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
             powerTube.Received().TurnOff();
+            timer.Received().Stop();
         }
 
         //[Test]
