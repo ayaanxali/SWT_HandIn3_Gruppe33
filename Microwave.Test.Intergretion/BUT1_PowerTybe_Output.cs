@@ -31,7 +31,7 @@ namespace Microwave.Test.Intergretion
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains("turned off")));
             
         }
-
+        [TestCase(699)]
         [TestCase(99)]
         [TestCase(2)]
         public void PowerTupe_WhenTurnedOn_OutputLineContainsTurnedOn(int power)
@@ -39,6 +39,14 @@ namespace Microwave.Test.Intergretion
             sut.TurnOn(power);
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
+        }
+        [TestCase(700)]
+        [TestCase(1)]
+        public void PowerTupe_WhenTurnedOn_OutputLineDoesNotreciev(int power)
+        {
+            sut.TurnOn(power);
+
+            output.DidNotReceive().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
         }
     }
 }

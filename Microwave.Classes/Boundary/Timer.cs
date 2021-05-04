@@ -43,7 +43,7 @@ namespace Microwave.Classes.Boundary
         {
             // One tick has passed
             // Do what I should
-            TimeRemaining --; //was 1000 but should be -- 
+            TimeRemaining --; //was 1000 but should be -1 or -- 
             TimerTick?.Invoke(this, EventArgs.Empty);
 
             if (TimeRemaining <= 0)

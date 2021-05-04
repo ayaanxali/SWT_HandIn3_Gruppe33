@@ -33,7 +33,9 @@ namespace Microwave.Test.Intergretion
            sut = new CookController(timer, display, powerTube, UI);
         }
 
-        [TestCase(50,50)]
+        [TestCase(50,05)]
+        [TestCase(100, 02)]
+        [TestCase(2, 06)]
         public void CookController_StartCooking_OutputIsReceivedOne(int power,int time)
         {
             sut.StartCooking(power,time);
@@ -41,7 +43,7 @@ namespace Microwave.Test.Intergretion
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
         }
 
-        [TestCase(50, 50)]
+        [TestCase(50, 05)]
         public void CookController_StopCooking_OutputIsReceivedOne(int power, int time)
         {
             sut.StartCooking(power, time);

@@ -20,7 +20,6 @@ namespace Microwave.Test.Intergretion
         private ITimer timer;
         private CookController cookController;
         private IOutput output;
-        private EventArgs timerHandler;
 
         [SetUp]
         public void SetUp()
