@@ -13,7 +13,7 @@ namespace Microwave.Test.Intergretion
 {
     [TestFixture]
 
-    class BUT5_CookController_Timer
+    class BUT4_CookController_Timer
     {
         private IPowerTube powerTube;
         private IDisplay display;

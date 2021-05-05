@@ -11,7 +11,7 @@ using Timer = Microwave.Classes.Boundary.Timer;
 namespace Microwave.Test.Intergretion
 {
     [TestFixture]
-    public class TDT_FullSystem
+    public class TDT13_FullSystem
     {
         private IUserInterface UI;
         private CookController CC;
@@ -94,6 +94,8 @@ namespace Microwave.Test.Intergretion
 
             var _consoleOutput = readConsole.ToString();
             Assert.That(_consoleOutput.Contains("PowerTube turned off"));
+            Assert.That(_consoleOutput.Contains("Light is turned off"));
+            Assert.That(_consoleOutput.Contains("Display cleared"));
         }
 
         [Test]

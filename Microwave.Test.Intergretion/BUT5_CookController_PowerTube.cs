@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
@@ -11,7 +12,7 @@ namespace Microwave.Test.Intergretion
 {
     [TestFixture]
 
-    class BUT4_CookController_PowerTube
+    class BUT5_CookController_PowerTube
     {
         private IPowerTube powerTube;
         private IDisplay display;
@@ -20,17 +21,20 @@ namespace Microwave.Test.Intergretion
         private ITimer timer;
         private CookController sut;
         private IOutput output;
+        private StringWriter readConsole;
 
         [SetUp]
         public void SetUp()
         {
-            output = Substitute.For<IOutput>();
+            output = new Output();
             powerTube = new PowerTube(output);
-            display = new Display(output);
-            light = new Light(output);
+            display = Substitute.For<IDisplay>();
+            light = Substitute.For<ILight>();
             timer = Substitute.For<ITimer>();
             UI = Substitute.For<IUserInterface>();
-           sut = new CookController(timer, display, powerTube, UI);
+            sut = new CookController(timer, display, powerTube, UI);
+            readConsole = new StringWriter();
+            System.Console.SetOut(readConsole);
         }
 
         [TestCase(50,05)]
@@ -40,7 +44,9 @@ namespace Microwave.Test.Intergretion
         {
             sut.StartCooking(power,time);
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube works with " + power));
+
         }
 
         [TestCase(50, 05)]
@@ -50,7 +56,8 @@ namespace Microwave.Test.Intergretion
 
             sut.Stop();
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains("turned off")));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
         }
 
 

@@ -29,19 +29,16 @@ namespace Microwave.Test.Intergretion
         [SetUp]
         public void SetUp()
         {
-            buttonOfPower = Substitute.For<IButton>();
-            buttonOfTime = Substitute.For<IButton>();
-            buttonOfstartCancel = Substitute.For<IButton>();
-            door = Substitute.For<IDoor>();
+            buttonOfPower = new Button();
+            buttonOfTime = new Button();
+            buttonOfstartCancel = new Button();
+            door = new Door();
             light = Substitute.For<ILight>();
-            //timer = Substitute.For<ITimer>();
-            //powerTube = Substitute.For<IPowerTube>();
             output = Substitute.For<IOutput>();
             CC = Substitute.For<ICookController>();
             display = new Display(output);
             UI = new UserInterface(buttonOfPower, buttonOfTime, buttonOfstartCancel, door, display, light, CC);
-            UI2 = Substitute.For<IUserInterface>();
-            
+
         }
         
         [Test]
