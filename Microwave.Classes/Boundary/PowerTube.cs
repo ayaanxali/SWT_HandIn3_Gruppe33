@@ -16,9 +16,9 @@ namespace Microwave.Classes.Boundary
 
         public void TurnOn(int power)
         {
-            if (power > 1 || 700 > power) //this is a mistake should be 700 instead of 100 (krokodillenæb er ændret retning)
+            if (power < 1 || 700 < power) //this is a mistake should be 700 instead of 100 (krokodillenæb er ændret retning)
             {
-                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 100 (incl.)");
+                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 700 (incl.)");
             }
 
             if (IsOn)

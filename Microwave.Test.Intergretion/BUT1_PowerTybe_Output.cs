@@ -40,13 +40,6 @@ namespace Microwave.Test.Intergretion
 
             output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
         }
-        [TestCase(700)]
-        [TestCase(1)]
-        public void PowerTupe_WhenTurnedOn_OutputLineDoesNotreciev(int power)
-        {
-            sut.TurnOn(power);
-
-            output.DidNotReceive().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
-        }
+        
     }
 }

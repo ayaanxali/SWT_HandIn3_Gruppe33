@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
@@ -13,7 +14,7 @@ namespace Microwave.Test.Intergretion
     public class TDT_FullSystem
     {
         private IUserInterface UI;
-        private ICookController CC;
+        private CookController CC;
         private IDisplay display;
         private IButton buttonOfPower;
         private IButton buttonOfTime;
@@ -23,11 +24,12 @@ namespace Microwave.Test.Intergretion
         private ITimer timer;
         private PowerTube powerTube;
         private IOutput output;
+        private StringWriter readConsole;
 
         [SetUp]
         public void SetUp()
         {
-            output = Substitute.For<IOutput>();
+            output = new Output();
             display = new Display(output);
             buttonOfPower = new Button();
             buttonOfTime = new Button();
@@ -38,6 +40,9 @@ namespace Microwave.Test.Intergretion
             powerTube = new PowerTube(output);
             CC = new CookController(timer, display, powerTube);
             UI = new UserInterface(buttonOfPower, buttonOfTime, buttonOfstartCancel, door, display, light, CC);
+            CC.UI = UI;
+            readConsole = new StringWriter();
+            System.Console.SetOut(readConsole);
         }
         [TestCase(1, 50)]
         [TestCase(2, 100)]
@@ -60,12 +65,18 @@ namespace Microwave.Test.Intergretion
         [TestCase(3,3)]
         public void PressedTimerButton_setTime_OutputShowsTime(int numberOfPressed, int ExpectedTime)
         {
-           buttonOfPower.Press();
+            string result = "";
+
+            buttonOfPower.Press();
            for (int i = 0; i < numberOfPressed; i++)
            {
                buttonOfTime.Press();
            }
-           output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Display") && s.Contains(Convert.ToString(ExpectedTime))));
+
+           var _consoleOutput = readConsole.ToString();
+           
+           Assert.That(_consoleOutput.Contains("Display shows: 0" + ExpectedTime + ":00\r\n"));
+
         }
 
         [TestCase(1, 1)]
@@ -78,11 +89,10 @@ namespace Microwave.Test.Intergretion
                 buttonOfTime.Press();
             }
             buttonOfstartCancel.Press();
-            //Thread.Sleep(1010*ExpectedTime); denne linje skal muligvis være der for at testen venter til at tiden faktisk er udløbet. prøv uden og med linjen. 
+            Thread.Sleep(60000*ExpectedTime+500); //denne linje skal muligvis være der for at testen venter til at tiden faktisk er udløbet. prøv uden og med linjen. 
 
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube is turned off")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Display cleared")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Light turned off")));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
         }
 
         [Test]
@@ -94,8 +104,10 @@ namespace Microwave.Test.Intergretion
             buttonOfstartCancel.Press();
 
             //muligvis skal rækkefølgen ændres
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Light is turned on")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(50))));
+            var _consoleOutput = readConsole.ToString();
+
+            Assert.That(_consoleOutput.Contains("Light is turned on"));
+            Assert.That(_consoleOutput.Contains("PowerTube works with 50"));
         }
 
         [Test]
@@ -107,8 +119,11 @@ namespace Microwave.Test.Intergretion
 
             door.Open();
 
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube turned off")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Display cleared")));
+            var _consoleOutput = readConsole.ToString();
+
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
+            Assert.That(_consoleOutput.Contains("Display cleared"));
+
         }
 
         [Test]
@@ -121,10 +136,12 @@ namespace Microwave.Test.Intergretion
             buttonOfstartCancel.Press();
 
             //muligvis skal rækkefølgen ændres. 
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("PowerTube turned off")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Light is turned off")));
-            output.Received().OutputLine(Arg.Is<string>(s => s.Contains("Display cleared")));
-           
+            var _consoleOutput = readConsole.ToString();
+
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
+            Assert.That(_consoleOutput.Contains("Light is turned off"));
+            Assert.That(_consoleOutput.Contains("Display cleared"));
+
         }
     }
 }
