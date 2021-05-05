@@ -145,7 +145,7 @@ namespace Microwave.Test.Unit
             // wait for ticks, only a little longer
             pause.WaitOne(ticks * 1000 + 100);
 
-            Assert.That(uut.TimeRemaining, Is.EqualTo(5-ticks)); //Ændret fra 5000 til 5
+            Assert.That(uut.TimeRemaining, Is.EqualTo(5-ticks)); //Ændret fra 5000 til 5 & *1000 removed
         }
     }
 }
