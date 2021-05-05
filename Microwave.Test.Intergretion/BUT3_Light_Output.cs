@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Interfaces;
@@ -14,20 +15,24 @@ namespace Microwave.Test.Intergretion
     {
         private Light sut;
         private IOutput output;
+        private StringWriter readConsole;
 
         [SetUp]
         public void SetUp()
         {
-            output = Substitute.For<IOutput>();
+            output = new Output();
             sut = new Light(output);
+            readConsole = new StringWriter();
+            System.Console.SetOut(readConsole);
         }
 
         [Test]
         public void Light_WhenTurnOnIsCalled_OutputLineContainsTurnedOn()
         {
             sut.TurnOn();
-            
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("Light") && s.Contains("turned on")));
+
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("Light is turned on"));
         }
 
         [Test]
@@ -37,7 +42,8 @@ namespace Microwave.Test.Intergretion
 
             sut.TurnOff();
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("Light") && s.Contains("turned off")));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("Light is turned off"));
         }
 
     }

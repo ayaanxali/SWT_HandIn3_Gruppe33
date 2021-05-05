@@ -57,7 +57,8 @@ namespace Microwave.Test.Intergretion
             buttonOfTime.Press();
             buttonOfstartCancel.Press();
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(ExpectedPower))));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube works with "+ExpectedPower));
         }
 
         [TestCase(1,1)]
@@ -141,6 +142,21 @@ namespace Microwave.Test.Intergretion
             Assert.That(_consoleOutput.Contains("PowerTube turned off"));
             Assert.That(_consoleOutput.Contains("Light is turned off"));
             Assert.That(_consoleOutput.Contains("Display cleared"));
+
+        }
+
+        [Test]
+        public void StartCooking_OpenDoor_StopCooking()
+        {
+            buttonOfPower.Press();
+            buttonOfTime.Press();
+            buttonOfstartCancel.Press();
+            Thread.Sleep(1010*5);
+            door.Open();
+
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("Display cleared"));
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
 
         }
     }

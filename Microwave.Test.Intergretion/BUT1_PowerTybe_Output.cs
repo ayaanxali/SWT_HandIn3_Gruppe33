@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
@@ -11,14 +12,16 @@ namespace Microwave.Test.Intergretion
     public class Tests
     {
         private PowerTube sut;
-        private IOutput output; 
+        private IOutput output;
+        private StringWriter readConsole;
 
         [SetUp]
         public void Setup()
         {
-            output = Substitute.For<IOutput>();
+            output = new Output();
             sut = new PowerTube(output);
-            
+            readConsole = new StringWriter();
+            System.Console.SetOut(readConsole);
         }
 
         [Test]
@@ -28,7 +31,9 @@ namespace Microwave.Test.Intergretion
 
             sut.TurnOff();
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains("turned off")));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube turned off"));
+
             
         }
         [TestCase(699)]
@@ -38,7 +43,8 @@ namespace Microwave.Test.Intergretion
         {
             sut.TurnOn(power);
 
-            output.Received(1).OutputLine(Arg.Is<string>(s => s.Contains("PowerTube") && s.Contains(Convert.ToString(power))));
+            var _consoleOutput = readConsole.ToString();
+            Assert.That(_consoleOutput.Contains("PowerTube works with " + power));
         }
         
     }

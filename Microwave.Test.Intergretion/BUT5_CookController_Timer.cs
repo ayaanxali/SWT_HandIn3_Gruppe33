@@ -59,5 +59,14 @@ namespace Microwave.Test.Intergretion
             powerTube.Received().TurnOff();
 
         }
+
+        [Test]
+        public void Timer_StopTimer()
+        {
+            sut.Stop();
+
+            powerTube.Received().TurnOff();
+
+        }
     }
 }
