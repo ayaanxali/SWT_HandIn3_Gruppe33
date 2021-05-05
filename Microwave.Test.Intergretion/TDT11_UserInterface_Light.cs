@@ -24,10 +24,10 @@ namespace Microwave.Test.Intergretion
         [SetUp]
         public void SetUp()
         {
-            buttonOfPower = Substitute.For<IButton>();
-            buttonOfTime = Substitute.For<IButton>();
-            buttonOfstartCancel = Substitute.For<IButton>();
-            door = Substitute.For<IDoor>();
+            buttonOfPower = new Button();
+            buttonOfTime = new Button();
+            buttonOfstartCancel = new Button();
+            door = new Door();
             output = Substitute.For<IOutput>();
             light = new Light(output);
             CC = Substitute.For<ICookController>();
@@ -38,13 +38,9 @@ namespace Microwave.Test.Intergretion
         [Test]
         public void Light_OnStartCancelPressed_TurnOn()
         {
-            //buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-
-            UI.OnPowerPressed(this, EventArgs.Empty);
-            UI.OnTimePressed(this, EventArgs.Empty);
-            UI.OnStartCancelPressed(this, EventArgs.Empty);
+            buttonOfPower.Press();
+            buttonOfTime.Press();
+            buttonOfstartCancel.Press();
 
             output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
         }
@@ -52,15 +48,10 @@ namespace Microwave.Test.Intergretion
         [Test]
         public void Light_OnStartCancelPressed_TurnOff()
         {
-            //buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-
-            UI.OnPowerPressed(this, EventArgs.Empty);
-            UI.OnTimePressed(this, EventArgs.Empty);
-            UI.OnStartCancelPressed(this, EventArgs.Empty);
-            UI.OnStartCancelPressed(this, EventArgs.Empty);
+            buttonOfPower.Press();
+            buttonOfTime.Press();   
+            buttonOfstartCancel.Press();
+            buttonOfstartCancel.Press();
 
             output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
         }

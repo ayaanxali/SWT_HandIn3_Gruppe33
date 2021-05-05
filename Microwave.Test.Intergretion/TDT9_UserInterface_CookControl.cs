@@ -27,10 +27,10 @@ namespace Microwave.Test.Intergretion
         public void SetUp()
         {
             display = Substitute.For<IDisplay>();
-            buttonOfPower = Substitute.For<IButton>();
-            buttonOfTime = Substitute.For<IButton>();
-            buttonOfstartCancel = Substitute.For<IButton>();
-            door = Substitute.For<IDoor>();
+            buttonOfPower = new Button();
+            buttonOfTime = new Button();
+            buttonOfstartCancel = new Button();
+            door = new Door();
             light = Substitute.For<ILight>();
             timer = Substitute.For<ITimer>();
             output = Substitute.For<IOutput>();
@@ -49,11 +49,11 @@ namespace Microwave.Test.Intergretion
 
             for (int i = 0; i < nummerOfPressed; i++)
             {
-                buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
+                buttonOfPower.Press();
             }
 
-            buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfTime.Press();
+            buttonOfstartCancel.Press();
 
             powerTube.Received().TurnOn(ExpectedPower);
         }
@@ -61,26 +61,13 @@ namespace Microwave.Test.Intergretion
         [Test]
         public void Stop_StopCooking()
         {
-            buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
+            buttonOfPower.Press();
+            buttonOfTime.Press();
+            buttonOfstartCancel.Press();
+            buttonOfstartCancel.Press();
 
             powerTube.Received().TurnOff();
             timer.Received().Stop();
-        }
-
-        [Test]
-        public void CookingIsDone()
-        {
-            buttonOfPower.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfTime.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            buttonOfstartCancel.Pressed += Raise.EventWith(this, EventArgs.Empty);
-
-
-            light.Received().TurnOff();
-            display.Received().Clear();
         }
     }
 }
