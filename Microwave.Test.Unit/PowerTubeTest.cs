@@ -28,9 +28,9 @@ namespace Microwave.Test.Unit
             output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"{power}")));
         }
 
-        [TestCase(-5)]
-        [TestCase(-1)]
-        [TestCase(0)]
+        [TestCase(-5)] 
+        [TestCase(10)] //ændret fra -1
+        [TestCase(50)] // ændret fra 0
         [TestCase(701)] //Ændret fra 101 til 701
         [TestCase(750)] //Ændret fra 150 til 750
         public void TurnOn_WasOffOutOfRangePower_ThrowsException(int power)
